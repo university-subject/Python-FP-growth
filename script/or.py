@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 def filter_unfreq_items(dataset, min_freq):
     data_dict = defaultdict(int)
     # 統計每一項出現的次數
@@ -23,7 +25,7 @@ def rank_by_header(data, header_dict):
             rank_dict[item] = header_dict[item]
     
     # 對元素按照整體出現的頻次排序
-    item_list = sorted(rank_dict.items(), lambda x: x[1], reverse=True)
+    item_list = sorted(rank_dict.items(),key=lambda x: x[1], reverse=True)
     return [i[0] for i in item_list]
 
 class Node:
@@ -57,8 +59,9 @@ def insert_table(head_node, node):
         head_node = head_node.ptr
     head_node.ptr = node
 
-def create_FP_tree(dataset, min_freq=3):
-    header_dict = filter_unfreq_items(dataset, min_freq)
+def create_FP_tree(dataset, header_dict=None, min_freq=3):
+    if head_table == None:
+        header_dict = filter_unfreq_items(dataset, min_freq)
     root = Node('Null', 0, None)
     for data in dataset:
         # 根據整體出現次數進行排序
@@ -127,7 +130,39 @@ def mine_freq_lists(root, head_table, min_freq, base, freq_lists):
             new_root = create_FP_tree(new_dataset, new_head_table, min_freq)
             # 遞迴挖掘
             mine_freq_lists(new_root, new_head_table, min_freq, new_base, freq_lists)
-    
+
+data_path = 'test_data/mushroom.dat'
+def create_dataset(min_freq=3):
+    # dataset = {}
+    dataset = {}
+    # 統計出現數字頻率，存到字典
+    # if type(fp) is not list:
+    fp = open(data_path, 'r')
+    for line in fp.readlines():
+        tmp = line.replace('\n', '').split(' ')
+        for item in tmp:
+            temp_set = list()
+            temp_set.append(item)
+        temp_set = tuple(temp_set)
+        if temp_set in dataset:
+            dataset[temp_set]+=1
+        else:
+            dataset[temp_set]=1
+            # dataset.append(temp_set)
+            # print(item)
+            # if item.isdigit() == True:
+            #     item = int(item)
+            #     if item in dataset:
+            #         dataset[item] += 1
+            #     else:
+            #         dataset[item] = 1
+    freq_dataset = {}
+    for i, j in dataset.items():
+        if j >= min_freq:
+            freq_dataset[i] = j
+    fp.close()
+    return freq_dataset
+
 if __name__ == "__main__":
     dataset = create_dataset()
     data_dict = filter_unfreq_items(dataset, 3)
