@@ -181,37 +181,34 @@ def mine_freq_lists(root, header_table, min_freq, base, freq_lists):
             mine_freq_lists(new_root, new_head_table, min_freq, new_base, freq_lists)
 
 
+if __name__ == '__main__':
+    # fp = [line.split(' ') for line in open('mushroom.dat','r').readlines()]
+    min_freq = 813
+    freq_dataset = {}
+    freq_dataset = filter_unfreq_items(None,min_freq)
+    # print(freq_dataset)
+    header_table = {}
+    header_table = dataset_to_header_table(freq_dataset)
+    # print(header_table)
+    root = create_FP_tree(None,header_table, min_freq)
+    # data = {}
+    # data = regenerate_dataset(header_table, 65)
+    freq_lists = []
+    mine_freq_lists(root, header_table, min_freq, set([]), freq_lists)
 
+    for l in range(1,6):
+        count=0
+        for i in freq_lists:
+            if len(i) == l:
+                count+=1
+        print('L^',l,'=',count)
 
-# fp = [line.split(' ') for line in open('mushroom.dat','r').readlines()]
-min_freq = 813
-freq_dataset = {}
-freq_dataset = filter_unfreq_items(None,min_freq)
-# print(freq_dataset)
-header_table = {}
-header_table = dataset_to_header_table(freq_dataset)
-# print(header_table)
-root = create_FP_tree(None,header_table, min_freq)
-# data = {}
-# data = regenerate_dataset(header_table, 65)
-freq_lists = []
-mine_freq_lists(root, header_table, min_freq, set([]), freq_lists)
+    print(len(freq_lists))
 
-
-for l in range(1,6):
-    count=0
-    for i in freq_lists:
-        if len(i) == l:
-            count+=1
-    print('L^',l,'=',count)
-
-print(len(freq_lists))
-
-
-# with open('mushroom.dat', 'r') as fp:
-#     for line in fp.readlines():
-#         tmp = line.split(' ')
-#         # del '\n'
-#         del tmp[-1]
-#         row_data = filter_sort_row_data(tmp, freq_dataset)
-#         # print(row_data)
+    # with open('mushroom.dat', 'r') as fp:
+    #     for line in fp.readlines():
+    #         tmp = line.split(' ')
+    #         # del '\n'
+    #         del tmp[-1]
+    #         row_data = filter_sort_row_data(tmp, freq_dataset)
+    #         # print(row_data)
