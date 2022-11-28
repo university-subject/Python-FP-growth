@@ -1,8 +1,11 @@
+from node import Node
+data_path = 'test_data/mushroom.dat'
+
 def filter_unfreq_items(fp,min_freq):
     dataset = {}
     # 統計出現數字頻率，存到字典
     if type(fp) is not list:
-        fp = open('mushroom.dat', 'r')
+        fp = open(data_path, 'r')
         for line in fp.readlines():
             tmp = line.split(' ')
             del tmp[-1]
@@ -35,7 +38,6 @@ def filter_unfreq_items(fp,min_freq):
                 freq_dataset[i] = j
         return freq_dataset   
 
-
 def dataset_to_header_table(dataset):
     # value: list[0]:freq,list[1]:NULL pointer
     return {i: [j, None] for i, j in dataset.items()}
@@ -52,22 +54,6 @@ def filter_sort_row_data(row_data, freq_dataset):
     sort_dict = sorted(filter_data.items(), key=lambda x: x[1], reverse=True)
     # 回傳排序過的數字list
     return [i[0] for i in sort_dict]
-
-class Node:
-    def __init__(self, item, freq, father):
-        self.item = item
-        self.freq = freq
-        self.father = father # father節點指標
-        self.ptr = None # 定義指標
-        self.children = {} # children節點，用dict儲存，方便根據item查詢
-    
-    # 更新頻次
-    def update_freq(self):
-        self.freq += 1
-
-    # 新增children
-    def add_child(self, node):
-        self.children[node.item] = node
 
 def up_forward(node):
     path = []
@@ -87,7 +73,7 @@ def create_FP_tree(fp,header_table, min_freq):
     root = Node('Null', 0, None)
     # print(type(fp) is not list)
     if type(fp) is not list:
-        fp = open('mushroom.dat', 'r')
+        fp = open(data_path, 'r')
         for line in fp.readlines():
             tmp = line.split(' ')
             del tmp[-1]
@@ -198,6 +184,7 @@ if __name__ == '__main__':
 
     for l in range(1,6):
         count=0
+        print(freq_lists)
         for i in freq_lists:
             if len(i) == l:
                 count+=1
